@@ -67,8 +67,8 @@ async function customWaifuMsg(messageArray, result) {
     // 扩充消息列表，增加重要消息权重
     if (messageArray.length < 4) {
         messageArray = messageArray.concat(messageArray);
-        messageArray.push(randomSelection(["曾经沧海难为水，除却巫山不是云", "醉后不知天在水,满船清梦压星河"]));
-        let extra_msg = ["大坏蛋！你都多久没理人家了呀，嘤嘤嘤～", "嗨～快来逗我玩吧！", "喵~~~喵喵喵？"]
+        messageArray.push(randomSelection(result.message.verse));
+        let extra_msg = result.message.default;
         let n = 0
         while (messageArray.length < 7 && n < extra_msg.length) {
             messageArray.push(extra_msg[n]);

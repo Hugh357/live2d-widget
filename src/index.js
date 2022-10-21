@@ -63,11 +63,11 @@ function loadWidget(config) {
         return text;
     }
 
-    function registerEventListener(result) {
+    async function registerEventListener(result) {
         // 检测用户活动状态，并在空闲时显示消息
         let userAction = false,
             userActionTimer,
-            messageArray = result.message.default;
+            messageArray = [];
         window.addEventListener("mousemove", () => userAction = true);
         window.addEventListener("keydown", () => userAction = true);
         setInterval(() => {
@@ -113,7 +113,7 @@ function loadWidget(config) {
             }
         });
         // comment: add 插入自定义消息
-        messageArray = customWaifuMsg(messageArray, result);
+        messageArray = await customWaifuMsg(messageArray, result);
 
         const devtools = () => { };
         console.log("%c", devtools);
