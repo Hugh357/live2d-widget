@@ -23,13 +23,20 @@ class Model {
         this.modelList = await response.json();
     }
 
+    // comment: add 定向选择材质
+    async selectionModel(obj, x) {
+        return Array.isArray(obj) ? obj[x] : obj;
+    }
+
     async loadModel(modelId, modelTexturesId, message) {
         localStorage.setItem("modelId", modelId);
         localStorage.setItem("modelTexturesId", modelTexturesId);
         showMessage(message, 4000, 10);
         if (this.useCDN) {
             if (!this.modelList) await this.loadModelList();
-            const target = randomSelection(this.modelList.models[modelId]);
+            // comment: modify 随机加载 -》 指定加载
+            // const target = randomSelection(this.modelList.models[modelId]);
+            const target = this.selectionModel(this.modelList.models[modelId], modelTexturesId);
             loadlive2d("live2d", `${this.cdnPath}model/${target}/index.json`);
         } else {
             loadlive2d("live2d", `${this.apiPath}get/?id=${modelId}-${modelTexturesId}`);
@@ -42,7 +49,12 @@ class Model {
             modelTexturesId = localStorage.getItem("modelTexturesId");
         if (this.useCDN) {
             if (!this.modelList) await this.loadModelList();
-            const target = randomSelection(this.modelList.models[modelId]);
+            // comment: modify 随机材质时也保存id
+            // const target = randomSelection(this.modelList.models[modelId]);
+            const RandModelTexturesId = Math.floor(Math.random() * this.modelList.models[modelId].length);
+            const target = this.selectionModel(this.modelList.models[modelId], RandModelTexturesId);
+            localStorage.setItem("modelId", modelId);
+            localStorage.setItem("modelTexturesId", RandModelTexturesId);
             loadlive2d("live2d", `${this.cdnPath}model/${target}/index.json`);
             showMessage("我的新衣服好看嘛？", 4000, 10);
         } else {

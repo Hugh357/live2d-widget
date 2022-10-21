@@ -2,6 +2,7 @@ import Model from "./model.js";
 import showMessage from "./message.js";
 import randomSelection from "./utils.js";
 import tools from "./tools.js";
+import customWaifuMsg from "./custom-waifu-msg.js";
 
 function loadWidget(config) {
     const model = new Model(config);
@@ -77,7 +78,8 @@ function loadWidget(config) {
             } else if (!userActionTimer) {
                 userActionTimer = setInterval(() => {
                     showMessage(messageArray, 6000, 9);
-                }, 20000);
+                }, 14000);
+                // comment: 空闲时显示消息的间隔，包括消息展示时间 modify 20000 -》 14000
             }
         }, 1000);
         showMessage(welcomeMessage(result.time), 7000, 11);
@@ -99,9 +101,10 @@ function loadWidget(config) {
                 return;
             }
         });
+        // comment: perf 提出循环体
+        const now = new Date()
         result.seasons.forEach(({ date, text }) => {
-            const now = new Date(),
-                after = date.split("-")[0],
+            const after = date.split("-")[0],
                 before = date.split("-")[1] || after;
             if ((after.split("/")[0] <= now.getMonth() + 1 && now.getMonth() + 1 <= before.split("/")[0]) && (after.split("/")[1] <= now.getDate() && now.getDate() <= before.split("/")[1])) {
                 text = randomSelection(text);
@@ -109,6 +112,8 @@ function loadWidget(config) {
                 messageArray.push(text);
             }
         });
+        // comment: add 插入自定义消息
+        messageArray = customWaifuMsg(messageArray, result);
 
         const devtools = () => { };
         console.log("%c", devtools);
@@ -128,8 +133,9 @@ function loadWidget(config) {
             modelTexturesId = localStorage.getItem("modelTexturesId");
         if (modelId === null) {
             // 首次访问加载 指定模型 的 指定材质
-            modelId = 1; // 模型 ID
-            modelTexturesId = 53; // 材质 ID
+            // comment: modify 1,53 -》 5,12
+            modelId = 5; // 模型 ID
+            modelTexturesId = 12; // 材质 ID
         }
         model.loadModel(modelId, modelTexturesId);
         fetch(config.waifuPath)
