@@ -36,7 +36,7 @@ class Model {
             if (!this.modelList) await this.loadModelList();
             // comment: modify 随机加载 -》 指定加载
             // const target = randomSelection(this.modelList.models[modelId]);
-            const target = this.selectionModel(this.modelList.models[modelId], modelTexturesId);
+            const target = await this.selectionModel(this.modelList.models[modelId], modelTexturesId);
             loadlive2d("live2d", `${this.cdnPath}model/${target}/index.json`);
         } else {
             loadlive2d("live2d", `${this.apiPath}get/?id=${modelId}-${modelTexturesId}`);
@@ -52,7 +52,7 @@ class Model {
             // comment: modify 随机材质时也保存id
             // const target = randomSelection(this.modelList.models[modelId]);
             const RandModelTexturesId = Math.floor(Math.random() * this.modelList.models[modelId].length);
-            const target = this.selectionModel(this.modelList.models[modelId], RandModelTexturesId);
+            const target = await this.selectionModel(this.modelList.models[modelId], RandModelTexturesId);
             localStorage.setItem("modelId", modelId);
             localStorage.setItem("modelTexturesId", RandModelTexturesId);
             loadlive2d("live2d", `${this.cdnPath}model/${target}/index.json`);

@@ -75,6 +75,7 @@ async function customWaifuMsg(messageArray, result) {
             n = n + 1;
         }
     }
+    console.log('messageArray', messageArray);
     return messageArray;
 }
 
